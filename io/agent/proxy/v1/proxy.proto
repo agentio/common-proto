@@ -1,0 +1,42 @@
+// Copyright 2024 Agent IO. All Rights Reserved.
+
+syntax = "proto3";
+
+package io.agent.proxy.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/agentio/common-go/io/agent/proxy/v1;proxyv1";
+
+message Profile {
+  string name = 1;
+  Auth auth = 2;
+  repeated Upstream upstreams = 3;
+}
+
+message Auth {
+    oneof auth_mechanism {
+      OIDC oidc = 1;
+    }
+}
+
+message OIDC {
+  string jwks_uri = 1;
+}
+
+message Upstream {
+  string name = 1;
+  string host = 2;
+  Credential credential = 3;
+  repeated Operation operations = 4;
+}
+
+message Credential {
+  string token = 1;
+  google.protobuf.Timestamp expires = 2;
+}
+
+message Operation {
+  string method = 1;
+  string path = 2;
+}
